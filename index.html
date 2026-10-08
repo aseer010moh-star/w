@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>العلاقة البيانية للشغل - فيزياء</title>
-    <!-- تضمين مكتبة الرسوم البيانية Chart.js -->
+    <title>سلسلة الأمين في الفيزياء 2027 - محاكاة الشغل</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -15,11 +14,20 @@
             margin: 0;
             padding: 20px;
         }
-        h2 { color: #d4af37; margin-bottom: 5px; }
-        .subtitle { color: #8892b0; font-size: 14px; margin-bottom: 20px; }
-        
+        .series-title {
+            color: #4fd1c5;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        h2 { 
+            color: #d4af37; 
+            margin-top: 0;
+            margin-bottom: 15px; 
+        }
         .container {
-            max-width: 850px;
+            max-width: 900px;
             margin: 0 auto;
             background: #111d22;
             border: 2px solid #d4af37;
@@ -27,7 +35,37 @@
             padding: 20px;
             box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
         }
-
+        /* نظام التبويبات (Tabs) */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: #18262c;
+            color: #a0aec0;
+            border: 1px solid #2d3748;
+            padding: 10px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background: #d4af37;
+            color: #0b1315;
+            border-color: #d4af37;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        
         .controls {
             display: flex;
             gap: 20px;
@@ -51,92 +89,179 @@
             width: 100%;
             accent-color: #4fd1c5;
         }
-
-        .charts-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 700px) {
-            .charts-container { grid-template-columns: 1fr; }
-        }
         .chart-box {
             background: #060a0c;
             border: 1px solid #23353e;
             border-radius: 8px;
-            padding: 10px;
+            padding: 15px;
+            position: relative;
+            height: 350px;
         }
-        .chart-title {
-            color: #4fd1c5;
-            font-size: 14px;
-            margin-bottom: 10px;
-            font-weight: bold;
+        
+        /* تنسيق تبويب المسألة وتغيير الأرقام */
+        .problem-card {
+            background: #18262c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .problem-text {
+            font-size: 16px;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            border-right: 4px solid #d4af37;
+            padding-right: 10px;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .result-item {
+            background: #060a0c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+        .result-item span {
+            display: block;
+            font-size: 13px;
+            color: #a0aec0;
+            margin-bottom: 5px;
+        }
+        .result-item strong {
+            font-size: 18px;
+            color: #68d391;
+        }
+
+        /* حقوق النشر في الأسفل */
+        .footer-rights {
+            margin-top: 25px;
+            font-size: 13px;
+            color: #8892b0;
+            border-top: 1px solid #23353e;
+            padding-top: 15px;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-    <h2>محاكاة الشغل والعلاقات البيانية</h2>
-    <div class="subtitle">القانون: W = F × d × cos(θ)</div>
+    <div class="series-title">سلسلة الأمين في الفيزياء 2027</div>
+    <h2>محاكاة الشغل وقانون W = F · d · cos(θ)</h2>
 
     <div class="container">
-        <!-- لوحة التحكم لتغيير القوة والإزاحة -->
-        <div class="controls">
-            <div class="control-group">
-                <label>القوة (F): <span id="f_val" style="color: #4fd1c5;">50 N</span></label>
-                <input type="range" id="forceRange" min="1" max="100" step="1" value="50">
+        <!-- شريط التبويبات (3 تبويبات فقط) -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(0)">العلاقة بين الشغل والزاوية</button>
+            <button class="tab-btn" onclick="switchTab(1)">العلاقة بين الشغل و cos(θ)</button>
+            <button class="tab-btn" onclick="switchTab(2)">مسألة وتغيير الأرقام</button>
+        </div>
+
+        <!-- التبويب الأول: العلاقة بين الشغل والزاوية -->
+        <div class="tab-content active">
+            <div class="controls">
+                <div class="control-group">
+                    <label>القوة (F): <span id="f_val1" style="color: #4fd1c5;">50 N</span></label>
+                    <input type="range" id="forceRange1" min="1" max="100" step="1" value="50">
+                </div>
+                <div class="control-group">
+                    <label>الإزاحة (d): <span id="d_val1" style="color: #4fd1c5;">10 m</span></label>
+                    <input type="range" id="dispRange1" min="1" max="50" step="1" value="10">
+                </div>
             </div>
-            <div class="control-group">
-                <label>الإزاحة (d): <span id="d_val" style="color: #4fd1c5;">10 m</span></label>
-                <input type="range" id="dispRange" min="1" max="50" step="1" value="10">
+            <div class="chart-box">
+                <canvas id="angleChart"></canvas>
             </div>
         </div>
 
-        <!-- شاشات الرسوم البيانية -->
-        <div class="charts-container">
+        <!-- التبويب الثاني: العلاقة بين الشغل و cos(θ) -->
+        <div class="tab-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label>القوة (F): <span id="f_val2" style="color: #4fd1c5;">50 N</span></label>
+                    <input type="range" id="forceRange2" min="1" max="100" step="1" value="50">
+                </div>
+                <div class="control-group">
+                    <label>الإزاحة (d): <span id="d_val2" style="color: #4fd1c5;">10 m</span></label>
+                    <input type="range" id="dispRange2" min="1" max="50" step="1" value="10">
+                </div>
+            </div>
             <div class="chart-box">
-                <div class="chart-title">العلاقة بين الشغل (W) و cos(θ)</div>
                 <canvas id="cosChart"></canvas>
             </div>
-            <div class="chart-box">
-                <div class="chart-title">العلاقة بين الشغل (W) والزاوية (θ)</div>
-                <canvas id="angleChart"></canvas>
+        </div>
+
+        <!-- التبويب الثالث: مسألة وتغيير الأرقام -->
+        <div class="tab-content">
+            <div class="problem-card">
+                <div class="problem-text">
+                    <strong>مسألة تفاعلية:</strong> أثرت قوة ثابتة مقدارها <span id="p_f_text" style="color:#4fd1c5">50</span> نيوتن على جسم لتحريكه إزاحة افقية قدرها <span id="p_d_text" style="color:#4fd1c5">10</span> متر، بحيث تصنع القوة زاوية قدرها <span id="p_th_text" style="color:#4fd1c5">60</span> درجة مع اتجاه الإزاحة. احسب الشغل المبذول؟
+                </div>
+                
+                <div class="controls" style="margin-bottom: 0;">
+                    <div class="control-group">
+                        <label>القوة F (N): <span id="prob_f_val">50</span></label>
+                        <input type="range" id="probF" min="1" max="100" value="50">
+                    </div>
+                    <div class="control-group">
+                        <label>الإزاحة d (m): <span id="prob_d_val">10</span></label>
+                        <input type="range" id="probD" min="1" max="50" value="10">
+                    </div>
+                    <div class="control-group">
+                        <label>الزاوية θ (°): <span id="prob_th_val">60</span></label>
+                        <input type="range" id="probTh" min="0" max="180" value="60">
+                    </div>
+                </div>
             </div>
+
+            <div class="results-grid">
+                <div class="result-item">
+                    <span>قيمة cos(θ)</span>
+                    <strong id="resCos">0.50</strong>
+                </div>
+                <div class="result-item">
+                    <span>نوع الشغل</span>
+                    <strong id="resType">موجب</strong>
+                </div>
+                <div class="result-item">
+                    <span>الشغل المبذول (W)</span>
+                    <strong id="resWork">250.00 J</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- حقوق النشر المطلوبة -->
+        <div class="footer-rights">
+            جميع الحقوق محفوظة © أ/محمد أمين نظير 2027
         </div>
     </div>
 
     <script>
-        const forceRange = document.getElementById('forceRange');
-        const dispRange = document.getElementById('dispRange');
-        const f_val = document.getElementById('f_val');
-        const d_val = document.getElementById('d_val');
+        // نظام التنقل بين التبويبات
+        function switchTab(index) {
+            const buttons = document.querySelectorAll('.tab-btn');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            buttons.forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('active');
+                    contents[i].classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                    contents[i].classList.remove('active');
+                }
+            });
+            angleChart.update();
+            cosChart.update();
+        }
 
-        // إعداد الرسم البياني الأول (W مع cos(theta)) - علاقة طردية خطية
-        const ctxCos = document.getElementById('cosChart').getContext('2d');
-        const cosChart = new Chart(ctxCos, {
-            type: 'line',
-            data: {
-                labels: [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0],
-                datasets: [{
-                    label: 'الشغل (Joule)',
-                    data: [],
-                    borderColor: '#4fd1c5',
-                    backgroundColor: 'rgba(79, 209, 197, 0.1)',
-                    fill: true,
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { title: { display: true, text: 'cos(θ)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
-                    y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
-                },
-                plugins: { legend: { labels: { color: '#e2e8f0' } } }
-            }
-        });
-
-        // إعداد الرسم البياني الثاني (W مع الزاوية theta) - منحنى جيب تمام
+        // إعداد الرسم البياني الأول (W مع الزاوية theta)
         const ctxAngle = document.getElementById('angleChart').getContext('2d');
         const angleChart = new Chart(ctxAngle, {
             type: 'line',
@@ -153,6 +278,7 @@
             },
             options: {
                 responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     x: { title: { display: true, text: 'الزاوية θ (درجة)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
                     y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
@@ -161,33 +287,113 @@
             }
         });
 
-        function updateCharts() {
-            let F = parseFloat(forceRange.value);
-            let d = parseFloat(dispRange.value);
+        // إعداد الرسم البياني الثاني (W مع cos(theta))
+        const ctxCos = document.getElementById('cosChart').getContext('2d');
+        const cosChart = new Chart(ctxCos, {
+            type: 'line',
+            data: {
+                labels: [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0],
+                datasets: [{
+                    label: 'الشغل (Joule)',
+                    data: [],
+                    borderColor: '#4fd1c5',
+                    backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { title: { display: true, text: 'cos(θ)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
+                    y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
+                },
+                plugins: { legend: { labels: { color: '#e2e8f0' } } }
+            }
+        });
 
-            f_val.innerText = F + " N";
-            d_val.innerText = d + " m";
+        const forceRange1 = document.getElementById('forceRange1');
+        const dispRange1 = document.getElementById('dispRange1');
+        const f_val1 = document.getElementById('f_val1');
+        const d_val1 = document.getElementById('d_val1');
 
-            // 1. حساب بيانات الرسم البياني الأول (W مقابل cos)
+        const forceRange2 = document.getElementById('forceRange2');
+        const dispRange2 = document.getElementById('dispRange2');
+        const f_val2 = document.getElementById('f_val2');
+        const d_val2 = document.getElementById('d_val2');
+
+        const probF = document.getElementById('probF');
+        const probD = document.getElementById('probD');
+        const probTh = document.getElementById('probTh');
+        const prob_f_val = document.getElementById('prob_f_val');
+        const prob_d_val = document.getElementById('prob_d_val');
+        const prob_th_val = document.getElementById('prob_th_val');
+        const p_f_text = document.getElementById('p_f_text');
+        const p_d_text = document.getElementById('p_d_text');
+        const p_th_text = document.getElementById('p_th_text');
+        const resCos = document.getElementById('resCos');
+        const resType = document.getElementById('resType');
+        const resWork = document.getElementById('resWork');
+
+        function updateAll() {
+            let F1 = parseFloat(forceRange1.value);
+            let d1 = parseFloat(dispRange1.value);
+            f_val1.innerText = F1 + " N";
+            d_val1.innerText = d1 + " m";
+
+            let angles = [0, 30, 60, 90, 120, 150, 180];
+            angleChart.data.datasets[0].data = angles.map(angle => F1 * d1 * Math.cos((angle * Math.PI) / 180));
+            angleChart.update();
+
+            let F2 = parseFloat(forceRange2.value);
+            let d2 = parseFloat(dispRange2.value);
+            f_val2.innerText = F2 + " N";
+            d_val2.innerText = d2 + " m";
+
             let cosValues = [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
-            cosChart.data.datasets[0].data = cosValues.map(cosVal => F * d * cosVal);
+            cosChart.data.datasets[0].data = cosValues.map(cVal => F2 * d2 * cVal);
             cosChart.update();
 
-            // 2. حساب بيانات الرسم البياني الثاني (W مقابل الزاوية بالدرجات)
-            let angles = [0, 30, 60, 90, 120, 150, 180];
-            angleChart.data.datasets[0].data = angles.map(angleDeg => {
-                let rad = (angleDeg * Math.PI) / 180;
-                return F * d * Math.cos(rad);
-            });
-            angleChart.update();
+            let pf = parseFloat(probF.value);
+            let pd = parseFloat(probD.value);
+            let pth = parseFloat(probTh.value);
+
+            prob_f_val.innerText = pf;
+            prob_d_val.innerText = pd;
+            prob_th_val.innerText = pth;
+            p_f_text.innerText = pf;
+            p_d_text.innerText = pd;
+            p_th_text.innerText = pth;
+
+            let rad = (pth * Math.PI) / 180;
+            let cval = Math.cos(rad);
+            let work = pf * pd * cval;
+
+            resCos.innerText = cval.toFixed(2);
+            resWork.innerText = work.toFixed(2) + " J";
+
+            if (pth < 90) {
+                resType.innerText = "موجب (مساعد)";
+                resType.style.color = "#68d391";
+            } else if (pth === 90) {
+                resType.innerText = "صفر (عمودي)";
+                resType.style.color = "#a0aec0";
+            } else {
+                resType.innerText = "سالب (معاكس)";
+                resType.style.color = "#fc8181";
+            }
         }
 
-        forceRange.addEventListener('input', updateCharts);
-        dispRange.addEventListener('input', updateCharts);
+        forceRange1.addEventListener('input', updateAll);
+        dispRange1.addEventListener('input', updateAll);
+        forceRange2.addEventListener('input', updateAll);
+        dispRange2.addEventListener('input', updateAll);
+        probF.addEventListener('input', updateAll);
+        probD.addEventListener('input', updateAll);
+        probTh.addEventListener('input', updateAll);
 
-        // التشغيل الأولي
-        updateCharts();
+        updateAll();
     </script>
-
 </body>
 </html>
