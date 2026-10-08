@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>العلاقة البيانية للشغل - فيزياء</title>
+    <!-- تضمين مكتبة الرسوم البيانية Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background-color: #0b1315;
+            color: #e2e8f0;
+            font-family: Tahoma, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h2 { color: #d4af37; margin-bottom: 5px; }
+        .subtitle { color: #8892b0; font-size: 14px; margin-bottom: 20px; }
+        
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            background: #111d22;
+            border: 2px solid #d4af37;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            background: #18262c;
+            padding: 15px;
+            border-radius: 8px;
+        }
+        .control-group {
+            flex: 1;
+            text-align: right;
+        }
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #a0aec0;
+        }
+        .control-group input[type="range"] {
+            width: 100%;
+            accent-color: #4fd1c5;
+        }
+
+        .charts-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 700px) {
+            .charts-container { grid-template-columns: 1fr; }
+        }
+        .chart-box {
+            background: #060a0c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .chart-title {
+            color: #4fd1c5;
+            font-size: 14px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>محاكاة الشغل والعلاقات البيانية</h2>
+    <div class="subtitle">القانون: W = F × d × cos(θ)</div>
+
+    <div class="container">
+        <!-- لوحة التحكم لتغيير القوة والإزاحة -->
+        <div class="controls">
+            <div class="control-group">
+                <label>القوة (F): <span id="f_val" style="color: #4fd1c5;">50 N</span></label>
+                <input type="range" id="forceRange" min="1" max="100" step="1" value="50">
+            </div>
+            <div class="control-group">
+                <label>الإزاحة (d): <span id="d_val" style="color: #4fd1c5;">10 m</span></label>
+                <input type="range" id="dispRange" min="1" max="50" step="1" value="10">
+            </div>
+        </div>
+
+        <!-- شاشات الرسوم البيانية -->
+        <div class="charts-container">
+            <div class="chart-box">
+                <div class="chart-title">العلاقة بين الشغل (W) و cos(θ)</div>
+                <canvas id="cosChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <div class="chart-title">العلاقة بين الشغل (W) والزاوية (θ)</div>
+                <canvas id="angleChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const forceRange = document.getElementById('forceRange');
+        const dispRange = document.getElementById('dispRange');
+        const f_val = document.getElementById('f_val');
+        const d_val = document.getElementById('d_val');
+
+        // إعداد الرسم البياني الأول (W مع cos(theta)) - علاقة طردية خطية
+        const ctxCos = document.getElementById('cosChart').getContext('2d');
+        const cosChart = new Chart(ctxCos, {
+            type: 'line',
+            data: {
+                labels: [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0],
+                datasets: [{
+                    label: 'الشغل (Joule)',
+                    data: [],
+                    borderColor: '#4fd1c5',
+                    backgroundColor: 'rgba(79, 209, 197, 0.1)',
+                    fill: true,
+                    tension: 0.1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'cos(θ)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
+                    y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
+                },
+                plugins: { legend: { labels: { color: '#e2e8f0' } } }
+            }
+        });
+
+        // إعداد الرسم البياني الثاني (W مع الزاوية theta) - منحنى جيب تمام
+        const ctxAngle = document.getElementById('angleChart').getContext('2d');
+        const angleChart = new Chart(ctxAngle, {
+            type: 'line',
+            data: {
+                labels: [0, 30, 60, 90, 120, 150, 180],
+                datasets: [{
+                    label: 'الشغل (Joule)',
+                    data: [],
+                    borderColor: '#d4af37',
+                    backgroundColor: 'rgba(212, 175, 55, 0.1)',
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'الزاوية θ (درجة)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
+                    y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
+                },
+                plugins: { legend: { labels: { color: '#e2e8f0' } } }
+            }
+        });
+
+        function updateCharts() {
+            let F = parseFloat(forceRange.value);
+            let d = parseFloat(dispRange.value);
+
+            f_val.innerText = F + " N";
+            d_val.innerText = d + " m";
+
+            // 1. حساب بيانات الرسم البياني الأول (W مقابل cos)
+            let cosValues = [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
+            cosChart.data.datasets[0].data = cosValues.map(cosVal => F * d * cosVal);
+            cosChart.update();
+
+            // 2. حساب بيانات الرسم البياني الثاني (W مقابل الزاوية بالدرجات)
+            let angles = [0, 30, 60, 90, 120, 150, 180];
+            angleChart.data.datasets[0].data = angles.map(angleDeg => {
+                let rad = (angleDeg * Math.PI) / 180;
+                return F * d * Math.cos(rad);
+            });
+            angleChart.update();
+        }
+
+        forceRange.addEventListener('input', updateCharts);
+        dispRange.addEventListener('input', updateCharts);
+
+        // التشغيل الأولي
+        updateCharts();
+    </script>
+
+</body>
+</html>
