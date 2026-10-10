@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>سلسلة الأمين في الفيزياء 2027 - محاكاة الشغل</title>
+    <title>سلسلة الأمين في الفيزياء 2027 - الشغل والقدرة والكفاءة</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         body {
@@ -16,7 +16,7 @@
         }
         .series-title {
             color: #4fd1c5;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: bold;
             margin-bottom: 5px;
             letter-spacing: 1px;
@@ -27,19 +27,18 @@
             margin-bottom: 15px; 
         }
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             background: #111d22;
             border: 2px solid #d4af37;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25);
         }
-        /* نظام التبويبات (Tabs) */
         .tabs {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 5px;
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
@@ -47,10 +46,10 @@
             background: #18262c;
             color: #a0aec0;
             border: 1px solid #2d3748;
-            padding: 10px 18px;
+            padding: 8px 10px;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 11px;
             font-weight: bold;
             transition: all 0.3s ease;
         }
@@ -65,29 +64,126 @@
         .tab-content.active {
             display: block;
         }
-        
         .controls {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: space-around;
             margin-bottom: 20px;
             background: #18262c;
             padding: 15px;
             border-radius: 8px;
+            flex-wrap: wrap;
         }
         .control-group {
             flex: 1;
+            min-width: 220px;
             text-align: right;
         }
         .control-group label {
             display: block;
             margin-bottom: 5px;
-            font-size: 14px;
+            font-size: 13px;
             color: #a0aec0;
         }
         .control-group input[type="range"] {
             width: 100%;
             accent-color: #4fd1c5;
+        }
+        .simulation-visual {
+            background: #060a0c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            min-height: 180px;
+        }
+        .crane-box-anim {
+            width: 70px;
+            height: 50px;
+            background: #d4af37;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0b1315;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+            box-shadow: 0 0 10px rgba(212,175,55,0.4);
+            transition: transform 0.3s ease;
+        }
+        .crane-cable {
+            width: 2px;
+            background: #4fd1c5;
+            height: 40px;
+            margin: 0 auto;
+        }
+        .problem-card {
+            background: #18262c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 18px;
+            text-align: right;
+            margin-bottom: 20px;
+        }
+        .problem-text {
+            font-size: 15px;
+            color: #e2e8f0;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            border-right: 4px solid #d4af37;
+            padding-right: 10px;
+        }
+        .examples-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+        .example-btn {
+            background: #111d22;
+            color: #4fd1c5;
+            border: 1px solid #4fd1c5;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+        .example-btn:hover {
+            background: #4fd1c5;
+            color: #0b1315;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        @media (max-width: 700px) {
+            .results-grid { grid-template-columns: 1fr; }
+        }
+        .result-item {
+            background: #060a0c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        .result-item span {
+            display: block;
+            font-size: 12px;
+            color: #a0aec0;
+            margin-bottom: 5px;
+        }
+        .result-item strong {
+            font-size: 16px;
+            color: #68d391;
         }
         .chart-box {
             background: #060a0c;
@@ -95,155 +191,355 @@
             border-radius: 8px;
             padding: 15px;
             position: relative;
-            height: 350px;
+            height: 300px;
         }
         
-        /* تنسيق تبويب المسألة وتغيير الأرقام */
-        .problem-card {
+        /* تنسيق أسئلة الاختيار من متعدد */
+        .quiz-card {
+            background: #18262c;
+            border: 1px solid #23353e;
+            border-radius: 8px;
+            padding: 18px;
+            text-align: right;
+            margin-bottom: 15px;
+        }
+        .quiz-question {
+            font-size: 15px;
+            color: #e2e8f0;
+            margin-bottom: 12px;
+            font-weight: bold;
+        }
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .quiz-opt {
+            background: #111d22;
+            border: 1px solid #2d3748;
+            color: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: right;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+        .quiz-opt:hover {
+            border-color: #4fd1c5;
+        }
+        .quiz-feedback {
+            font-size: 13px;
+            font-weight: bold;
+            padding: 6px;
+            border-radius: 4px;
+            display: none;
+        }
+
+        /* تنسيق لعبة التوصيل والسحب */
+        .matching-game {
             background: #18262c;
             border: 1px solid #23353e;
             border-radius: 8px;
             padding: 20px;
             text-align: right;
-            margin-bottom: 20px;
         }
-        .problem-text {
-            font-size: 16px;
-            color: #e2e8f0;
-            line-height: 1.6;
+        .match-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
-            border-right: 4px solid #d4af37;
-            padding-right: 10px;
+            background: #111d22;
+            padding: 10px 15px;
+            border-radius: 6px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 15px;
-            margin-top: 20px;
+        .match-item {
+            font-weight: bold;
+            color: #d4af37;
         }
-        .result-item {
-            background: #060a0c;
-            border: 1px solid #23353e;
-            border-radius: 8px;
-            padding: 15px;
-            text-align: center;
-        }
-        .result-item span {
-            display: block;
-            font-size: 13px;
-            color: #a0aec0;
-            margin-bottom: 5px;
-        }
-        .result-item strong {
-            font-size: 18px;
-            color: #68d391;
+        .match-select {
+            background: #0b1315;
+            color: #4fd1c5;
+            border: 1px solid #4fd1c5;
+            padding: 8px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: Tahoma;
         }
 
-        /* حقوق النشر في الأسفل */
         .footer-rights {
             margin-top: 25px;
             font-size: 13px;
             color: #8892b0;
             border-top: 1px solid #23353e;
             padding-top: 15px;
-            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
     <div class="series-title">سلسلة الأمين في الفيزياء 2027</div>
-    <h2>محاكاة الشغل وقانون W = F · d · cos(θ)</h2>
+    <h2>محاكاة الفصل الأول: الشغل والقدرة والكفاءة</h2>
 
     <div class="container">
-        <!-- شريط التبويبات (3 تبويبات فقط) -->
+        <!-- شريط التبويبات (6 تبويبات) -->
         <div class="tabs">
-            <button class="tab-btn active" onclick="switchTab(0)">العلاقة بين الشغل والزاوية</button>
-            <button class="tab-btn" onclick="switchTab(1)">العلاقة بين الشغل و cos(θ)</button>
-            <button class="tab-btn" onclick="switchTab(2)">مسألة وتغيير الأرقام</button>
+            <button class="tab-btn active" onclick="switchTab(0)">1. الشغل</button>
+            <button class="tab-btn" onclick="switchTab(1)">2. القدرة العامة</button>
+            <button class="tab-btn" onclick="switchTab(2)">3. قدرة المصعد</button>
+            <button class="tab-btn" onclick="switchTab(3)">4. تدريب الرافعة</button>
+            <button class="tab-btn" onclick="switchTab(4)">5. أسئلة سريعة</button>
+            <button class="tab-btn" onclick="switchTab(5)">6. لعبة التوصيل 🎮</button>
         </div>
 
-        <!-- التبويب الأول: العلاقة بين الشغل والزاوية -->
+        <!-- التبويب الأول: الشغل -->
         <div class="tab-content active">
             <div class="controls">
                 <div class="control-group">
-                    <label>القوة (F): <span id="f_val1" style="color: #4fd1c5;">50 N</span></label>
-                    <input type="range" id="forceRange1" min="1" max="100" step="1" value="50">
+                    <label>القوة F: <span id="w_f_val" style="color: #4fd1c5;">50 نيوتن</span></label>
+                    <input type="range" id="w_f" min="1" max="100" value="50">
                 </div>
                 <div class="control-group">
-                    <label>الإزاحة (d): <span id="d_val1" style="color: #4fd1c5;">10 m</span></label>
-                    <input type="range" id="dispRange1" min="1" max="50" step="1" value="10">
+                    <label>الإزاحة d: <span id="w_d_val" style="color: #4fd1c5;">10 متر</span></label>
+                    <input type="range" id="w_d" min="1" max="50" value="10">
+                </div>
+                <div class="control-group">
+                    <label>الزاوية θ: <span id="w_th_val" style="color: #4fd1c5;">60 درجة</span></label>
+                    <input type="range" id="w_th" min="0" max="180" value="60">
                 </div>
             </div>
-            <div class="chart-box">
-                <canvas id="angleChart"></canvas>
+            <div class="results-grid">
+                <div class="result-item">
+                    <span>قيمة جيب التمام cos(θ)</span>
+                    <strong id="res_cos">0.50</strong>
+                </div>
+                <div class="result-item">
+                    <span>قانون الضرب القياسي</span>
+                    <strong>W = F · d · cos(θ)</strong>
+                </div>
+                <div class="result-item">
+                    <span>الشغل المبذول W</span>
+                    <strong id="res_w_val">250.00 جول</strong>
+                </div>
+            </div>
+            <div class="chart-box" style="margin-top: 15px;">
+                <canvas id="workChart"></canvas>
             </div>
         </div>
 
-        <!-- التبويب الثاني: العلاقة بين الشغل و cos(θ) -->
+        <!-- التبويب الثاني: القدرة العامة -->
         <div class="tab-content">
             <div class="controls">
                 <div class="control-group">
-                    <label>القوة (F): <span id="f_val2" style="color: #4fd1c5;">50 N</span></label>
-                    <input type="range" id="forceRange2" min="1" max="100" step="1" value="50">
+                    <label>الشغل المبذول W: <span id="p_w_val" style="color: #4fd1c5;">29400 جول</span></label>
+                    <input type="range" id="p_w" min="1000" max="100000" step="500" value="29400">
                 </div>
                 <div class="control-group">
-                    <label>الإزاحة (d): <span id="d_val2" style="color: #4fd1c5;">10 m</span></label>
-                    <input type="range" id="dispRange2" min="1" max="50" step="1" value="10">
+                    <label>الزمن المستغرق t: <span id="p_t_val" style="color: #4fd1c5;">12 ثانية</span></label>
+                    <input type="range" id="p_t" min="1" max="60" value="12">
                 </div>
             </div>
-            <div class="chart-box">
-                <canvas id="cosChart"></canvas>
+            <div class="results-grid">
+                <div class="result-item">
+                    <span>القانون المستخدم</span>
+                    <strong>P = W / t</strong>
+                </div>
+                <div class="result-item">
+                    <span>القدرة بالوات</span>
+                    <strong id="res_p_watt">2450.00 وات</strong>
+                </div>
+                <div class="result-item">
+                    <span>القدرة بالكيلووات</span>
+                    <strong id="res_p_kw">2.45 كيلووات</strong>
+                </div>
+            </div>
+            <div class="problem-card" style="margin-top: 20px; text-align: center;">
+                <div style="color: #d4af37; font-weight: bold; margin-bottom: 5px;">مفهوم القدرة:</div>
+                القدرة هي المعدل الزمني لأداء الشغل أو نقل الطاقة. كلما قل الزمن اللازم لإنجاز نفس الشغل، زادت قدرة الجهاز!
             </div>
         </div>
 
-        <!-- التبويب الثالث: مسألة وتغيير الأرقام -->
+        <!-- التبويب الثالث: قدرة المصعد والأجسام المتحركة -->
         <div class="tab-content">
+            <div class="controls">
+                <div class="control-group">
+                    <label>الكتلة m: <span id="el_m_val" style="color: #4fd1c5;">500 كجم</span></label>
+                    <input type="range" id="el_m" min="50" max="2000" step="50" value="500">
+                </div>
+                <div class="control-group">
+                    <label>السرعة الثابتة v: <span id="el_v_val" style="color: #4fd1c5;">0.5 متر/ثانية</span></label>
+                    <input type="range" id="el_v" min="0.1" max="5" step="0.1" value="0.5">
+                </div>
+                <div class="control-group">
+                    <label>الجاذبية g: <span id="el_g_val" style="color: #4fd1c5;">9.8 متر/ثانية²</span></label>
+                    <input type="range" id="el_g" min="9.6" max="10" step="0.1" value="9.8">
+                </div>
+            </div>
+            <div class="results-grid">
+                <div class="result-item">
+                    <span>القوة (الوزن F = m · g)</span>
+                    <strong id="res_el_f">4900.00 نيوتن</strong>
+                </div>
+                <div class="result-item">
+                    <span>العلاقة الرياضية</span>
+                    <strong>P = F · v</strong>
+                </div>
+                <div class="result-item">
+                    <span>القدرة المتوسطة P</span>
+                    <strong id="res_el_p">2450.00 وات</strong>
+                </div>
+            </div>
+        </div>
+
+        <!-- التبويب الرابع: تدريب الرافعة والأمثلة التفاعلية -->
+        <div class="tab-content">
+            <div class="examples-selector">
+                <button class="example-btn" onclick="loadExample(1)">مثال (1): الرافعة الرئيسية</button>
+                <button class="example-btn" onclick="loadExample(2)">مثال (2): محرك مصعد عمارة</button>
+                <button class="example-btn" onclick="loadExample(3)">مثال (3): سيارة تسحب حمولة</button>
+            </div>
+
             <div class="problem-card">
-                <div class="problem-text">
-                    <strong>مسألة تفاعلية:</strong> أثرت قوة ثابتة مقدارها <span id="p_f_text" style="color:#4fd1c5">50</span> نيوتن على جسم لتحريكه إزاحة افقية قدرها <span id="p_d_text" style="color:#4fd1c5">10</span> متر، بحيث تصنع القوة زاوية قدرها <span id="p_th_text" style="color:#4fd1c5">60</span> درجة مع اتجاه الإزاحة. احسب الشغل المبذول؟
+                <div class="problem-text" id="ex_problem_text">
+                    <strong>تدريب (الرافعة):</strong> ترفع رافعة في موقع بناء منصة ثقيلة كتلتها $5 \times 10^2$ كجم رأسياً إلى أعلى ارتفاع $6$ متر بسرعة ثابتة خلال $12$ ثانية بإهمال مقاومة الهواء. أوجد الشغل والقدرة!
                 </div>
                 
+                <div class="simulation-visual">
+                    <div style="font-size: 12px; color: #a0aec0; margin-bottom: 5px;" id="visual_height_label">ارتفاع الرفع: 6 متر</div>
+                    <div class="crane-cable"></div>
+                    <div class="crane-box-anim" id="animBox">صندوق</div>
+                    <div style="width: 150px; height: 4px; background: #d4af37; margin-top: 5px;"></div>
+                </div>
+
                 <div class="controls" style="margin-bottom: 0;">
                     <div class="control-group">
-                        <label>القوة F (N): <span id="prob_f_val">50</span></label>
-                        <input type="range" id="probF" min="1" max="100" value="50">
+                        <label>الكتلة m: <span id="tr_m_disp">500</span> كجم</label>
+                        <input type="range" id="tr_m" min="100" max="2000" step="50" value="500">
                     </div>
                     <div class="control-group">
-                        <label>الإزاحة d (m): <span id="prob_d_val">10</span></label>
-                        <input type="range" id="probD" min="1" max="50" value="10">
+                        <label>الارتفاع h: <span id="tr_h_disp">6</span> متر</label>
+                        <input type="range" id="tr_h" min="1" max="30" value="6">
                     </div>
                     <div class="control-group">
-                        <label>الزاوية θ (°): <span id="prob_th_val">60</span></label>
-                        <input type="range" id="probTh" min="0" max="180" value="60">
+                        <label>الزمن t: <span id="tr_t_disp">12</span> ثانية</label>
+                        <input type="range" id="tr_t" min="1" max="60" value="12">
                     </div>
                 </div>
             </div>
 
             <div class="results-grid">
                 <div class="result-item">
-                    <span>قيمة cos(θ)</span>
-                    <strong id="resCos">0.50</strong>
+                    <span>أ. الشغل (W = m · g · h)</span>
+                    <strong id="tr_res_w">29400.00 جول</strong>
                 </div>
                 <div class="result-item">
-                    <span>نوع الشغل</span>
-                    <strong id="resType">موجب</strong>
+                    <span>ب. القدرة (P = W / t)</span>
+                    <strong id="tr_res_p">2450.00 وات</strong>
                 </div>
                 <div class="result-item">
-                    <span>الشغل المبذول (W)</span>
-                    <strong id="resWork">250.00 J</strong>
+                    <span>ج. السرعة (v = h / t)</span>
+                    <strong id="tr_res_v">0.50 متر/ثانية</strong>
                 </div>
             </div>
         </div>
 
-        <!-- حقوق النشر المطلوبة -->
+        <!-- التبويب الخامس: أسئلة سريعة واختبار تفاعلي -->
+        <div class="tab-content">
+            <div class="quiz-card">
+                <div class="quiz-question">السؤال الأول: متى يكون الشغل المبذول بواسطة قوة مساوياً لصفر؟</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkAnswer(1, 0)">أ) عندما تكون القوة في نفس اتجاه الإزاحة</div>
+                    <div class="quiz-opt" onclick="checkAnswer(1, 1)">ب) عندما تكون القوة عمودية تماماً على اتجاه الإزاحة (الزاوية 90 درجة)</div>
+                    <div class="quiz-opt" onclick="checkAnswer(1, 2)">ج) عندما تكون الزاوية 180 درجة</div>
+                </div>
+                <div id="feedback_1" class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-card">
+                <div class="quiz-question">السؤال الثاني: ما وحدة قياس القدرة الأساسية في النظام الدولي؟</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkAnswer(2, 0)">أ) جول (Joule)</div>
+                    <div class="quiz-opt" onclick="checkAnswer(2, 1)">ب) نيوتن · متر (N.m)</div>
+                    <div class="quiz-opt" onclick="checkAnswer(2, 2)">ج) وات (Watt)</div>
+                </div>
+                <div id="feedback_2" class="quiz-feedback"></div>
+            </div>
+
+            <div class="quiz-card">
+                <div class="quiz-question">السؤال الثالث: أثرت قوة 10 نيوتن لتحريك جسم إزاحة 5 متر في نفس الاتجاه، كم يكون الشغل المبذول؟</div>
+                <div class="quiz-options">
+                    <div class="quiz-opt" onclick="checkAnswer(3, 0)">أ) 50 جول</div>
+                    <div class="quiz-opt" onclick="checkAnswer(3, 1)">ب) 2 جول</div>
+                    <div class="quiz-opt" onclick="checkAnswer(3, 2)">ج) 15 جول</div>
+                </div>
+                <div id="feedback_3" class="quiz-feedback"></div>
+            </div>
+        </div>
+
+        <!-- التبويب السادس: لعبة التوصيل وتدريبات التفاعل (جديد) -->
+        <div class="tab-content">
+            <div class="problem-card" style="text-align: center; color: #4fd1c5;">
+                <strong>لعبة التوصيل الذكية:</strong> اختر لكل كمية فيزيائية ما يناسبها من القوانين أو وحدات القياس الصحيحة، واضغط تحقق من الإجابات!
+            </div>
+
+            <div class="matching-game">
+                <div class="match-row">
+                    <span class="match-item">1. الشغل المبذول (W)</span>
+                    <select id="match_1" class="match-select">
+                        <option value="">-- اختر الإجابة المناسبة --</option>
+                        <option value="correct">F · d · cos(θ)</option>
+                        <option value="wrong">W / t</option>
+                        <option value="wrong">F · v</option>
+                    </select>
+                </div>
+
+                <div class="match-row">
+                    <span class="match-item">2. القدرة المتوسطة (P)</span>
+                    <select id="match_2" class="match-select">
+                        <option value="">-- اختر الإجابة المناسبة --</option>
+                        <option value="wrong">F · d · cos(θ)</option>
+                        <option value="correct">W / t</option>
+                        <option value="wrong">m · g · h</option>
+                    </select>
+                </div>
+
+                <div class="match-row">
+                    <span class="match-item">3. وحدة قياس الشغل (جول)</span>
+                    <select id="match_3" class="match-select">
+                        <option value="">-- اختر الإجابة المناسبة --</option>
+                        <option value="wrong">وات (Watt)</option>
+                        <option value="correct">نيوتن · متر (N.m)</option>
+                        <option value="wrong">متر / ثانية</option>
+                    </select>
+                </div>
+
+                <div class="match-row">
+                    <span class="match-item">4. قدرة مصعد يصعد بسرعة ثابتة</span>
+                    <select id="match_4" class="match-select">
+                        <option value="">-- اختر الإجابة المناسبة --</option>
+                        <option value="correct">F · v (أو m · g · v)</option>
+                        <option value="wrong">W / t</option>
+                        <option value="wrong">F · d</option>
+                    </select>
+                </div>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <button onclick="checkMatchingGame()" class="example-btn" style="padding: 10px 20px; font-size: 14px; background: #d4af37; color: #0b1315; border: none; font-weight: bold;">تحقق من الإجابات 🎉</button>
+                </div>
+                <div id="match_result" style="margin-top: 15px; font-size: 15px; font-weight: bold; display: none;"></div>
+            </div>
+        </div>
+
+        <!-- حقوق النشر -->
         <div class="footer-rights">
             جميع الحقوق محفوظة © أ/محمد أمين نظير 2027
         </div>
     </div>
 
     <script>
-        // نظام التنقل بين التبويبات
         function switchTab(index) {
             const buttons = document.querySelectorAll('.tab-btn');
             const contents = document.querySelectorAll('.tab-content');
@@ -257,18 +553,74 @@
                     contents[i].classList.remove('active');
                 }
             });
-            angleChart.update();
-            cosChart.update();
+            workChart.update();
         }
 
-        // إعداد الرسم البياني الأول (W مع الزاوية theta)
-        const ctxAngle = document.getElementById('angleChart').getContext('2d');
-        const angleChart = new Chart(ctxAngle, {
+        // تصحيح لعبة التوصيل
+        function checkMatchingGame() {
+            let m1 = document.getElementById('match_1').value;
+            let m2 = document.getElementById('match_2').value;
+            let m3 = document.getElementById('match_3').value;
+            let m4 = document.getElementById('match_4').value;
+            let resDiv = document.getElementById('match_result');
+
+            resDiv.style.display = 'block';
+
+            if (m1 === 'correct' && m2 === 'correct' && m3 === 'correct' && m4 === 'correct') {
+                resDiv.innerText = "🌟 بطل الأبطال! إجاباتك كلها صحيحة 100% ممتاز جداً!";
+                resDiv.style.color = "#68d391";
+            } else {
+                resDiv.innerText = "⚠️ حاول مرة أخرى، هناك بعض الإجابات غير الصحيحة!";
+                resDiv.style.color = "#fc8181";
+            }
+        }
+
+        // تصحيح الأسئلة السريعة
+        function checkAnswer(qNum, optIndex) {
+            const feedback = document.getElementById('feedback_' + qNum);
+            feedback.style.display = 'block';
+            
+            if (qNum === 1) {
+                if (optIndex === 1) {
+                    feedback.innerText = "إجابة صحيحة! لأن cos(90) = صفر، وبالتالي يكون الشغل صفراً.";
+                    feedback.style.color = "#68d391";
+                    feedback.style.background = "rgba(104, 211, 145, 0.1)";
+                } else {
+                    feedback.innerText = "إجابة خاطئة، حاول مرة أخرى!";
+                    feedback.style.color = "#fc8181";
+                    feedback.style.background = "rgba(252, 129, 129, 0.1)";
+                }
+            } else if (qNum === 2) {
+                if (optIndex === 2) {
+                    feedback.innerText = "إجابة صحيحة! الوحدة الأساسية للقدرة هي الوات (Watt أو J/s).";
+                    feedback.style.color = "#68d391";
+                    feedback.style.background = "rgba(104, 211, 145, 0.1)";
+                } else {
+                    feedback.innerText = "إجابة خاطئة، تذكر أن الجول والنيوتن.متر وحدات الشغل والطاقة!";
+                    feedback.style.color = "#fc8181";
+                    feedback.style.background = "rgba(252, 129, 129, 0.1)";
+                }
+            } else if (qNum === 3) {
+                if (optIndex === 0) {
+                    feedback.innerText = "إجابة صحيحة! W = F × d = 10 × 5 = 50 جول (باعتبار cos(0) = 1).";
+                    feedback.style.color = "#68d391";
+                    feedback.style.background = "rgba(104, 211, 145, 0.1)";
+                } else {
+                    feedback.innerText = "إجابة خاطئة، اضرب القوة في الإزاحة.";
+                    feedback.style.color = "#fc8181";
+                    feedback.style.background = "rgba(252, 129, 129, 0.1)";
+                }
+            }
+        }
+
+        // الرسم البياني للشغل مع الزاوية
+        const ctxWork = document.getElementById('workChart').getContext('2d');
+        const workChart = new Chart(ctxWork, {
             type: 'line',
             data: {
                 labels: [0, 30, 60, 90, 120, 150, 180],
                 datasets: [{
-                    label: 'الشغل (Joule)',
+                    label: 'الشغل (جول)',
                     data: [],
                     borderColor: '#d4af37',
                     backgroundColor: 'rgba(212, 175, 55, 0.1)',
@@ -281,119 +633,148 @@
                 maintainAspectRatio: false,
                 scales: {
                     x: { title: { display: true, text: 'الزاوية θ (درجة)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
-                    y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
+                    y: { title: { display: true, text: 'الشغل W (جول)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
                 },
                 plugins: { legend: { labels: { color: '#e2e8f0' } } }
             }
         });
 
-        // إعداد الرسم البياني الثاني (W مع cos(theta))
-        const ctxCos = document.getElementById('cosChart').getContext('2d');
-        const cosChart = new Chart(ctxCos, {
-            type: 'line',
-            data: {
-                labels: [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0],
-                datasets: [{
-                    label: 'الشغل (Joule)',
-                    data: [],
-                    borderColor: '#4fd1c5',
-                    backgroundColor: 'rgba(79, 209, 197, 0.1)',
-                    fill: true,
-                    tension: 0.1
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { title: { display: true, text: 'cos(θ)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } },
-                    y: { title: { display: true, text: 'الشغل W (J)', color: '#a0aec0' }, ticks: { color: '#a0aec0' } }
-                },
-                plugins: { legend: { labels: { color: '#e2e8f0' } } }
+        // عناصر التبويب الأول
+        const w_f = document.getElementById('w_f');
+        const w_d = document.getElementById('w_d');
+        const w_th = document.getElementById('w_th');
+        const w_f_val = document.getElementById('w_f_val');
+        const w_d_val = document.getElementById('w_d_val');
+        const w_th_val = document.getElementById('w_th_val');
+        const res_cos = document.getElementById('res_cos');
+        const res_w_val = document.getElementById('res_w_val');
+
+        // عناصر التبويب الثاني
+        const p_w = document.getElementById('p_w');
+        const p_t = document.getElementById('p_t');
+        const p_w_val = document.getElementById('p_w_val');
+        const p_t_val = document.getElementById('p_t_val');
+        const res_p_watt = document.getElementById('res_p_watt');
+        const res_p_kw = document.getElementById('res_p_kw');
+
+        // عناصر التبويب الثالث
+        const el_m = document.getElementById('el_m');
+        const el_v = document.getElementById('el_v');
+        const el_g = document.getElementById('el_g');
+        const el_m_val = document.getElementById('el_m_val');
+        const el_v_val = document.getElementById('el_v_val');
+        const el_g_val = document.getElementById('el_g_val');
+        const res_el_f = document.getElementById('res_el_f');
+        const res_el_p = document.getElementById('res_el_p');
+
+        // عناصر التبويب الرابع (الرافعة والأمثلة)
+        const tr_m = document.getElementById('tr_m');
+        const tr_h = document.getElementById('tr_h');
+        const tr_t = document.getElementById('tr_t');
+        const tr_m_disp = document.getElementById('tr_m_disp');
+        const tr_h_disp = document.getElementById('tr_h_disp');
+        const tr_t_disp = document.getElementById('tr_t_disp');
+        const tr_res_w = document.getElementById('tr_res_w');
+        const tr_res_p = document.getElementById('tr_res_p');
+        const tr_res_v = document.getElementById('tr_res_v');
+        const ex_problem_text = document.getElementById('ex_problem_text');
+        const animBox = document.getElementById('animBox');
+        const visual_height_label = document.getElementById('visual_height_label');
+
+        function loadExample(id) {
+            if (id === 1) {
+                ex_problem_text.innerHTML = "<strong>تدريب (الرافعة):</strong> ترفع رافعة في موقع بناء منصة ثقيلة كتلتها $500$ كجم رأسياً إلى أعلى ارتفاع $6$ متر بسرعة ثابتة خلال $12$ ثانية. أوجد الشغل والقدرة!";
+                tr_m.value = 500;
+                tr_h.value = 6;
+                tr_t.value = 12;
+            } else if (id === 2) {
+                ex_problem_text.innerHTML = "<strong>مثال (محرك مصعد):</strong> مصعد كهربائي كتلته ومحموليته الإجمالية $800$ كجم يرتفع مسافة رأسية $15$ متر خلال زمن قدره $10$ ثانية بسرعة ثابتة. احسب القدرة!";
+                tr_m.value = 800;
+                tr_h.value = 15;
+                tr_t.value = 10;
+            } else if (id === 3) {
+                ex_problem_text.innerHTML = "<strong>مثال (رفع أحمال سريعة):</strong> ونش رفعه الرأسي لكتلة $250$ كجم لارتفاع $10$ متر في زمن قياسي $5$ ثانية. أوجد القدرة المتولدة!";
+                tr_m.value = 250;
+                tr_h.value = 10;
+                tr_t.value = 5;
             }
-        });
-
-        const forceRange1 = document.getElementById('forceRange1');
-        const dispRange1 = document.getElementById('dispRange1');
-        const f_val1 = document.getElementById('f_val1');
-        const d_val1 = document.getElementById('d_val1');
-
-        const forceRange2 = document.getElementById('forceRange2');
-        const dispRange2 = document.getElementById('dispRange2');
-        const f_val2 = document.getElementById('f_val2');
-        const d_val2 = document.getElementById('d_val2');
-
-        const probF = document.getElementById('probF');
-        const probD = document.getElementById('probD');
-        const probTh = document.getElementById('probTh');
-        const prob_f_val = document.getElementById('prob_f_val');
-        const prob_d_val = document.getElementById('prob_d_val');
-        const prob_th_val = document.getElementById('prob_th_val');
-        const p_f_text = document.getElementById('p_f_text');
-        const p_d_text = document.getElementById('p_d_text');
-        const p_th_text = document.getElementById('p_th_text');
-        const resCos = document.getElementById('resCos');
-        const resType = document.getElementById('resType');
-        const resWork = document.getElementById('resWork');
-
-        function updateAll() {
-            let F1 = parseFloat(forceRange1.value);
-            let d1 = parseFloat(dispRange1.value);
-            f_val1.innerText = F1 + " N";
-            d_val1.innerText = d1 + " m";
-
-            let angles = [0, 30, 60, 90, 120, 150, 180];
-            angleChart.data.datasets[0].data = angles.map(angle => F1 * d1 * Math.cos((angle * Math.PI) / 180));
-            angleChart.update();
-
-            let F2 = parseFloat(forceRange2.value);
-            let d2 = parseFloat(dispRange2.value);
-            f_val2.innerText = F2 + " N";
-            d_val2.innerText = d2 + " m";
-
-            let cosValues = [-1.0, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1.0];
-            cosChart.data.datasets[0].data = cosValues.map(cVal => F2 * d2 * cVal);
-            cosChart.update();
-
-            let pf = parseFloat(probF.value);
-            let pd = parseFloat(probD.value);
-            let pth = parseFloat(probTh.value);
-
-            prob_f_val.innerText = pf;
-            prob_d_val.innerText = pd;
-            prob_th_val.innerText = pth;
-            p_f_text.innerText = pf;
-            p_d_text.innerText = pd;
-            p_th_text.innerText = pth;
-
-            let rad = (pth * Math.PI) / 180;
-            let cval = Math.cos(rad);
-            let work = pf * pd * cval;
-
-            resCos.innerText = cval.toFixed(2);
-            resWork.innerText = work.toFixed(2) + " J";
-
-            if (pth < 90) {
-                resType.innerText = "موجب (مساعد)";
-                resType.style.color = "#68d391";
-            } else if (pth === 90) {
-                resType.innerText = "صفر (عمودي)";
-                resType.style.color = "#a0aec0";
-            } else {
-                resType.innerText = "سالب (معاكس)";
-                resType.style.color = "#fc8181";
-            }
+            updateAllSimulations();
         }
 
-        forceRange1.addEventListener('input', updateAll);
-        dispRange1.addEventListener('input', updateAll);
-        forceRange2.addEventListener('input', updateAll);
-        dispRange2.addEventListener('input', updateAll);
-        probF.addEventListener('input', updateAll);
-        probD.addEventListener('input', updateAll);
-        probTh.addEventListener('input', updateAll);
+        function updateAllSimulations() {
+            let wf = parseFloat(w_f.value);
+            let wd = parseFloat(w_d.value);
+            let wth = parseFloat(w_th.value);
 
-        updateAll();
+            w_f_val.innerText = wf + " نيوتن";
+            w_d_val.innerText = wd + " متر";
+            w_th_val.innerText = wth + " درجة";
+
+            let rad = (wth * Math.PI) / 180;
+            let cval = Math.cos(rad);
+            let totalW = wf * wd * cval;
+
+            res_cos.innerText = cval.toFixed(2);
+            res_w_val.innerText = totalW.toFixed(2) + " جول";
+
+            let angles = [0, 30, 60, 90, 120, 150, 180];
+            workChart.data.datasets[0].data = angles.map(angle => wf * wd * Math.cos((angle * Math.PI) / 180));
+            workChart.update();
+
+            let pw = parseFloat(p_w.value);
+            let pt = parseFloat(p_t.value);
+            p_w_val.innerText = pw + " جول";
+            p_t_val.innerText = pt + " ثانية";
+            let pWatt = pw / pt;
+            res_p_watt.innerText = pWatt.toFixed(2) + " وات";
+            res_p_kw.innerText = (pWatt / 1000).toFixed(2) + " كيلووات";
+
+            let elm = parseFloat(el_m.value);
+            let elv = parseFloat(el_v.value);
+            let elg = parseFloat(el_g.value);
+            el_m_val.innerText = elm + " كجم";
+            el_v_val.innerText = elv + " متر/ثانية";
+            el_g_val.innerText = elg + " متر/ثانية²";
+
+            let elf = elm * elg;
+            let elp = elf * elv;
+            res_el_f.innerText = elf.toFixed(2) + " نيوتن";
+            res_el_p.innerText = elp.toFixed(2) + " وات";
+
+            let trmVal = parseFloat(tr_m.value);
+            let trhVal = parseFloat(tr_h.value);
+            let trtVal = parseFloat(tr_t.value);
+
+            tr_m_disp.innerText = trmVal;
+            tr_h_disp.innerText = trhVal;
+            tr_t_disp.innerText = trtVal;
+
+            let trWork = trmVal * 9.8 * trhVal;
+            let trPower = trWork / trtVal;
+            let trVel = trhVal / trtVal;
+
+            tr_res_v.innerText = trVel.toFixed(2) + " متر/ثانية";
+            tr_res_w.innerText = trWork.toFixed(2) + " جول";
+            tr_res_p.innerText = trPower.toFixed(2) + " وات";
+
+            let scaleAnim = 1 + (trhVal / 50);
+            animBox.style.transform = `translateY(-${trhVal * 1.5}px) scale(${scaleAnim})`;
+            visual_height_label.innerText = `محاكاة بصرية لحركة الرفع - الارتفاع الحالي: ${trhVal} متر`;
+        }
+
+        w_f.addEventListener('input', updateAllSimulations);
+        w_d.addEventListener('input', updateAllSimulations);
+        w_th.addEventListener('input', updateAllSimulations);
+        p_w.addEventListener('input', updateAllSimulations);
+        p_t.addEventListener('input', updateAllSimulations);
+        el_m.addEventListener('input', updateAllSimulations);
+        el_v.addEventListener('input', updateAllSimulations);
+        el_g.addEventListener('input', updateAllSimulations);
+        tr_m.addEventListener('input', updateAllSimulations);
+        tr_h.addEventListener('input', updateAllSimulations);
+        tr_t.addEventListener('input', updateAllSimulations);
+
+        updateAllSimulations();
     </script>
 </body>
 </html>
